@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +28,21 @@ public class PostagemController {
 		return ResponseEntity.ok(postagemRepository.findAll());
 	
 	/*Equivale a fazer select * form tb_postagens*/
-	}	
+	}
+	
+	
+	//<			busca por id		>
+				//variavel de caminho
+	@GetMapping("/{id}")
+	public ResponseEntity<Postagem> getById(@PathVariable Long id){
+		return postagemRepository.findById(id)
+				.map(resposta -> ResponseEntity.ok(resposta))  //Encontrou a resposta
+				.orElse(ResponseEntity.notFound().build());		//não encontrou a resposta
+	}
+	
+	//<			busca por titulo		>
+	@GetMapping("/titulo/{titulo}")
+	public ResponseEntity<List<Postagem>> getByTitulo(@PathVariable String titulo){
+		return ResponseEntity.ok(postagemRepository.findAllByTituloContainingIgnoreCase(titulo));
+	}		
 }
