@@ -6,38 +6,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "tb_postagens")
 public class Postagem {
-	//long é tipo o big int no mysql
-	@Id								
+
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//Para ser obrigatorio preencher
-	@NotBlank (message = "O título não pode estar vazio")
-	//tamanho do titulo
-	@Size(min = 5, max = 100, message = "Deve conter entre 5 a 100 caracteres")
+	@NotBlank(message = "O atributo título é obrigatório!")
+	@Size(min = 5, max = 100, message = "O atributo título deve conter entre 5 e 100 caracteres!")
 	private String titulo;
 	
-	//Para ser obrigatorio preencher
-	@NotBlank (message = "O texto não pode estar vazio")
-	//tamanho do texto
-	@Size(min = 5, max = 100, message = "Deve conter entre 10 a 1000 caracteres")
+	@NotBlank(message = "O atributo texto é obrigatório!")
+	@Size(min = 10, max = 1000, message = "O atributo título deve conter entre 10 e 1000 caracteres!")
 	private String texto;
 	
-	//atualiza a data sozinho
 	@UpdateTimestamp
 	private LocalDateTime data;
 	
+	@ManyToOne // relação com a minha chave estrangeira
+	@JsonIgnoreProperties("postagem") // ignora a repercursividade (escrever tema 2x)
+	//@NotBlank
+	private Tema tema;
 	
-	/*Métodos Get and Set*/
+	//Getters & Setters
+	
 	public Long getId() {
 		return id;
 	}
@@ -62,4 +65,11 @@ public class Postagem {
 	public void setData(LocalDateTime data) {
 		this.data = data;
 	}
+	public Tema getTema() {
+		return tema;
+	}
+	public void setTema(Tema tema) {
+		this.tema = tema;
+	}
+	
 }
