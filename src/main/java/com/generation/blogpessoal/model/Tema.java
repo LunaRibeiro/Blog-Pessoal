@@ -11,8 +11,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity // fala q vai ser uma tabela
 @Table(name = "tb_temas") // declara o nome da tabela
 public class Tema {
