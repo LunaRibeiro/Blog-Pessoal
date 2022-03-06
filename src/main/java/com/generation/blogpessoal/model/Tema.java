@@ -16,15 +16,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity // fala q vai ser uma tabela
 @Table(name = "tb_temas") // declara o nome da tabela
 public class Tema {
-	
+
 	@Id // fala q vai ser primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // fala q vai ser autoincrement
 	private Long id;
-	
+
 	@NotBlank(message = "O atributo título é obrigatório!")
 	private String descricao;
-	
-	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL) //declaro o tipo de relacao, cascade faz oq acontecer no tema acontece na postagem
+
+	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL) // declaro o tipo de relacao, cascade faz oq acontecer no
+																// tema acontece na postagem
 	@JsonIgnoreProperties("tema") //
 	private List<Postagem> postagem; // criei a chave estrangeira
 

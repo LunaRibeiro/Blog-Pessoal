@@ -54,7 +54,7 @@ public class TemaController {
 		return temaRepository.findById(tema.getId()) // procura pelo id
 				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(temaRepository.save(tema)))
 				.orElse(ResponseEntity.notFound().build());
-				// realiza se a resposta for nulla
+		// realiza se a resposta for nulla
 	}
 
 	@DeleteMapping("/{id}")

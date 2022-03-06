@@ -1,23 +1,24 @@
 package com.generation.blogpessoal.model;
 
 /**
- *  A Classe UsuariolOGIN não terá nenhuma anotação porque ela não irá gerar uma tabela
- *  no Banco de Dados.
+ * A Classe UsuariolOGIN não terá nenhuma anotação porque ela não irá gerar uma
+ * tabela no Banco de Dados.
  * 
- * A principal função desta classe é servir de apoio ao processo de login na API.
+ * A principal função desta classe é servir de apoio ao processo de login na
+ * API.
  */
 public class UsuarioLogin {
-	
+
 	private Long id;
-	
+
 	private String nome;
-	
+
 	private String usuario;
-	
+
 	private String senha;
-	
+
 	private String foto;
-	
+
 	private String token;
 
 	public Long getId() {
