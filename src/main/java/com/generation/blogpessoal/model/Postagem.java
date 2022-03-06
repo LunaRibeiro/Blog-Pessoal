@@ -41,8 +41,21 @@ public class Postagem {
 	//@NotBlank
 	private Tema tema;
 	
+	/*
+	 * Relacionamento com a classe Usuario
+	 */
+	@ManyToOne
+	@JsonIgnoreProperties("postagem")
+	private Usuario usuario;
+	
 	//Getters & Setters
 	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 	public Long getId() {
 		return id;
 	}
