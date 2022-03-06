@@ -24,41 +24,40 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull(message = "O nome é obrigatório!")
+	@NotNull(message = "O atributo Nome é Obrigatório!")
 	private String nome;
 
-	@NotNull(message = "O Usuário é obrigatório!")
-	@Email(message = "O atributo usuário deve ser um email váido!")
+	@NotNull(message = "O atributo Usuário é Obrigatório!")
+	@Email(message = "O atributo Usuário deve ser um email válido!")
 	private String usuario;
 
 	/**
-	 * A anotação @Size está definida apenas com um valor minimo porque ao
-	 * criptografar a senha a mesma terá um tamanho muito maior(em numero de
-	 * caracteres) do que a senha não criptografada.
+	 * A anotação @Size está definida apenas com o valor min
+	 * porque ao criptografar a senha a mesma terá uma tamanho
+	 * muito maior (em numero de caracteres) do que a senha
+	 * não ciptografada.
 	 * 
-	 * Exemplo: admin123 -> 8 caracteres admin123 criptografado -> 60 caracteres
+	 * Exemplo: admin123 -> 8 caracteres
+	 * admin123 criptografado -> 60 caracteres
 	 * 
-	 * A anotação @NotBlank indica que o atributo não deve ser nulo e/ou conter
-	 * espaço em branco.
-	 * 
+	 * A anotação @NotBlank indica que o atributo não deve ser
+	 * nulo e/ou conter espaços em branco.
 	 */
-
-	@NotBlank(message = "O atributo Senha é obrigatório!")
-	@Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+	@NotBlank(message = "O atributo Senha é Obrigatório!")
+	@Size(min = 8, message = "A Senha deve ter no mínimo 8 caracteres")
 	private String senha;
 
 	private String foto;
 
-	/*
-	 * CascadeType.REMOVE -> Ele propaga a operação de reomoção de um objeto Pai
-	 * para objeto Filho. Apenas quando remover a Entidade Usuario, também será
-	 * removida todas as entidades Postagens associadas. Nas demais operações não
-	 * haverá a propagação.
+	/**
+	 * CascadeType.REMOVE -> Ele propaga a operação de remoção de um objeto Pai para um 
+	 * objeto Filho. 
+	 * Apenas quando remover a Entidade Usuario, também será removida todas as entidades 
+	 * Postagens associadas. Nas demais operações não haverá a propagação.
 	 * 
-	 * CascadeType.All -> Ele propaga todas as operações (Inserir, Listar, Atualizar
-	 * e Apagar) de um objeto Pai para um objeto Filho.
+	 * CascadeType.ALL -> Ele propaga todas a operações (Inserir, Listar, Atualizar e Apagar)
+	 * de um objeto Pai para um objeto Filho. 
 	 */
-
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("usuario")
 	private List<Postagem> postagem;
