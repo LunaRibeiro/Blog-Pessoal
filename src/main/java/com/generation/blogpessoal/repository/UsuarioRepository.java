@@ -9,9 +9,13 @@ import org.springframework.stereotype.Repository;
 import com.generation.blogpessoal.model.Usuario;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
+public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
+	
 	public Optional<Usuario> findByUsuario(String usuario);
-
+	
+	public Optional<Usuario> findByIdAndUsuario (Long id, String usuario);
+	
+	//Método para testes
 	public List<Usuario> findAllByNomeContainingIgnoreCase(String nome);
+
 }

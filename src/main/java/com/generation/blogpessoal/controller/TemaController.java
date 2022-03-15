@@ -28,14 +28,9 @@ public class TemaController {
 	@Autowired
 	private TemaRepository temaRepository;
 
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<Tema>> getAll() {
 		return ResponseEntity.ok(temaRepository.findAll());
-	}
-
-	@PostMapping
-	public ResponseEntity<Tema> postTema(@Valid @RequestBody Tema tema) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(temaRepository.save(tema));
 	}
 
 	@GetMapping("/{id}")
@@ -49,19 +44,27 @@ public class TemaController {
 		return ResponseEntity.ok(temaRepository.findAllByDescricaoContainingIgnoreCase(descricao));
 	}
 
+	@PostMapping
+	public ResponseEntity<Tema> postTema(@Valid @RequestBody Tema tema) {
+		if (temaRepository.existsByDescricaoIgnoreCase(tema.getDescricao())) {
+			return new ResponseEntity("Este tema já existe.", HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(temaRepository.save(tema));
+	}
+
 	@PutMapping
 	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema) {
-		return temaRepository.findById(tema.getId()) // procura pelo id
+		return temaRepository.findById(tema.getId())
 				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(temaRepository.save(tema)))
 				.orElse(ResponseEntity.notFound().build());
-		// realiza se a resposta for nulla
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deleteTema(@PathVariable Long id) {
 		return temaRepository.findById(id).map(resposta -> {
 			temaRepository.deleteById(id);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.noContent().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
 

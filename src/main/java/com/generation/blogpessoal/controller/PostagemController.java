@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.generation.blogpessoal.model.Postagem;
+import com.generation.blogpessoal.model.Tema;
 import com.generation.blogpessoal.repository.PostagemRepository;
 import com.generation.blogpessoal.repository.TemaRepository;
 
@@ -26,56 +27,53 @@ import com.generation.blogpessoal.repository.TemaRepository;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostagemController {
 
-	@Autowired // da acesso ao meu controller a responsabilidade de criar e instanciar objetos
+	@Autowired
 	private PostagemRepository postagemRepository;
 
 	@Autowired
 	private TemaRepository temaRepository;
 
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<Postagem>> getAll() {
 		return ResponseEntity.ok(postagemRepository.findAll());
-	} // equivalente a fazer = select * from tb_postagens;
+	}
 
-	@GetMapping("/{id}") // variavel de caminho
+	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> getById(@PathVariable Long id) {
-		return postagemRepository.findById(id) // procura pelo id
-				.map(resposta -> ResponseEntity.ok(resposta)) // realiza se a resposta não for nulla
-				.orElse(ResponseEntity.notFound().build()); // realiza se a resposta for null
-		// Lambda = (resposta -> oqueretorna)
+		return postagemRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@GetMapping("/titulo/{titulo}")
 	public ResponseEntity<List<Postagem>> getByTitulo(@PathVariable String titulo) {
 		return ResponseEntity.ok(postagemRepository.findAllByTituloContainingIgnoreCase(titulo));
-	} // select * from tb_postagens where titulo like "%titulo%";
+	}
 
 	@PostMapping
-	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem) {
-		if (temaRepository.existsById(postagem.getTema().getId()))
+	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem, Tema tema) {
+		if (temaRepository.existsById(postagem.getTema().getId())) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
-
-		return ResponseEntity.notFound().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@PutMapping
 	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
 		if (temaRepository.existsById(postagem.getTema().getId())) {
-			return postagemRepository.findById(postagem.getId()) // procura pelo id
+			return postagemRepository.findById(postagem.getId())
 					.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem)))
-					// realiza se a resposta não for nulla
 					.orElse(ResponseEntity.notFound().build());
-			// realiza se a resposta for nulla
+		} else {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.notFound().build();
-
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deletePostagem(@PathVariable Long id) { // postagemRepository.deleteById(id);
+	public ResponseEntity<Object> deletePostagem(@PathVariable Long id) {
 		return postagemRepository.findById(id).map(resposta -> {
 			postagemRepository.deleteById(id);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.noContent().build();
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
